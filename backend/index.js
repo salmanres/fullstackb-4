@@ -2,37 +2,23 @@ const express = require('express')
 const app = express()
 const port = 3500;
 const cors = require('cors');
-
+const userdata = require('./schema/UserSchema');
+require('./database/mongoose');
 
 app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    try {
-        res.send('hello everyone this is me');
-    } catch (e) {
-        console.log(e);
-    };
+app.get('/', (req, res)=>{
+    res.send('hello');
 });
 
-app.get('/userdata', (req, res) => {
-    try {
-        const data = [
-            { id: 1, name: "Aarav Mehta", email: "aarav.mehta@example.com", isActive: true },
-            { id: 2, name: "Diya Kapoor", email: "diya.kapoor@example.com", isActive: false },
-            { id: 3, name: "Rohan Singh", email: "rohan.singh@example.com", isActive: true },
-            { id: 4, name: "Neha Sharma", email: "neha.sharma@example.com", isActive: true },
-            { id: 5, name: "Kabir Jain", email: "kabir.jain@example.com", isActive: false },
-            { id: 6, name: "Simran Kaur", email: "simran.kaur@example.com", isActive: true },
-            { id: 7, name: "Yash Verma", email: "yash.verma@example.com", isActive: true },
-            { id: 8, name: "Ananya Iyer", email: "ananya.iyer@example.com", isActive: false },
-            { id: 9, name: "Ishaan Patel", email: "ishaan.patel@example.com", isActive: true },
-            { id: 10, name: "Tanya Desai", email: "tanya.desai@example.com", isActive: true }
-        ]
-
-        res.status(248).json({message: "data retrieved successfully", data});
-
-    } catch (e) {
-        console.log(e);
+app.post('/register', async (req, res)=>{
+    try{
+        console.log(req.body);
+        await userdata.insertOne(req.body);
+        res.status(200).json({message:"user registration successful!"});
+    }catch(err){
+        console.log(err);
     };
 });
 
